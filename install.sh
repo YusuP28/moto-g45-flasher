@@ -29,7 +29,7 @@ cp -r /sdcard/FLASHABLE\ FOGOS\ TERMUX\ ROOT ./
 # Masuk ke direktori kerja
 cd ~/FLASHABLE\ FOGOS\ TERMUX\ ROOT
 
-# 4. Menu Pilihan Versi Android (Menggunakan read -n 1 agar langsung merespons)
+# 4. Menu Pilihan Versi Android
 echo -e "\n================================================="
 echo "           PILIH VERSI ANDROID"
 echo "================================================="
