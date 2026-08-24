@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Pastikan skrip berhenti jika terjadi error
-set -e
-
 # Palet Warna ANSI Estetik
 RED='\033[1;31m'
 GREEN='\033[1;32m'
@@ -48,7 +45,7 @@ pid=$!
 tampil_loading $pid "Mengunduh dan memasang utilitas android-tools..."
 echo -e "${GREEN}[✔] Paket android-tools berhasil terpasang dengan sempurna!${NC}"
 
-# 3. Validasi Keberadaan Folder Tanpa Proses Salin
+# 3. Validasi Keberadaan Folder
 echo -e "\n${MAGENTA}[3/3] Memeriksa struktur direktori firmware...${NC}"
 TARGET_PATH="/sdcard/FLASHABLE_FOGOS_TERMUX_ROOT"
 
@@ -56,11 +53,10 @@ if [ -d "$TARGET_PATH" ]; then
     echo -e "${GREEN}[✔] Folder target ditemukan di penyimpanan internal!${NC}"
 else
     echo -e "\n${RED}[X] Error: Folder '$TARGET_PATH' tidak ditemukan!${NC}"
-    echo -e "${YELLOW}Pastikan Anda telah membuat folder dengan nama tepat 'FLASHABLE_FOGOS_TERMUX_ROOT' di memori internal utama HP.${NC}"
+    echo -e "${YELLOW}Pastikan Anda membuat folder dengan nama tepat 'FLASHABLE_FOGOS_TERMUX_ROOT' di memori internal utama HP.${NC}"
     exit 1
 fi
 
-# Masuk langsung ke folder penyimpanan internal
 cd "$TARGET_PATH"
 
 # 4. Menu Pilihan Versi Android Interaktif
@@ -85,9 +81,13 @@ else
     exit 1
 fi
 
-# 5. Eksekusi Skrip Flashing
-echo -e "\n${MAGENTA}Menyiapkan eksekusi modul flashing...${NC}"
-echo -e "${YELLOW}-> INSTRUKSI: Ketik 'su' lalu tekan [ENTER] (izinkan Superuser jika muncul pop-up).${NC}"
-read -p "Tekan [ENTER] untuk mulai menjalankan proses..."
-
-su -c "export PATH=/data/data/com.termux/files/usr/bin:\$PATH && cd $TARGET_PATH && bash $SCRIPT_NAME"
+# 5. Instruksi Masuk Root Secara Manual
+echo -e "\n${CYAN}┌─────────────────────────────────────────────────┐${NC}"
+echo -e "${CYAN}│${YELLOW}              INSTRUKSI AKSES ROOT               ${CYAN}│${NC}"
+echo -e "${CYAN}└─────────────────────────────────────────────────┘${NC}"
+echo -e "${YELLOW}1. Ketik perintah${NC} ${GREEN}su${NC} ${YELLOW}lalu tekan ENTER.${NC}"
+echo -e "${YELLOW}2. Klik GRANT/IZINKAN jika muncul jendela Superuser di HP.${NC}"
+echo -e "${YELLOW}3. Setelah masuk root (tanda dolar '$' berubah jadi pagar '#'),${NC}"
+echo -e "${YELLOW}   ketik perintah di bawah ini untuk melanjutkan:${NC}"
+echo -e "${CYAN}   bash $SCRIPT_NAME${NC}"
+echo -e "${CYAN}───────────────────────────────────────────────────${NC}"
