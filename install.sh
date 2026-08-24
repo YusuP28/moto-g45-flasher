@@ -57,8 +57,6 @@ else
     exit 1
 fi
 
-cd "$TARGET_PATH"
-
 # 4. Menu Pilihan Versi Android Interaktif
 echo -e "\n${CYAN}┌─────────────────────────────────────────────────┐${NC}"
 echo -e "${CYAN}│               ${GREEN}PILIH VERSI ANDROID${CYAN}               │${NC}"
@@ -81,13 +79,12 @@ else
     exit 1
 fi
 
-# 5. Instruksi Masuk Root Secara Manual
+# 5. Eksekusi Otomatis Langsung ke Folder Penyimpanan Internal dengan Root
 echo -e "\n${CYAN}┌─────────────────────────────────────────────────┐${NC}"
-echo -e "${CYAN}│${YELLOW}              INSTRUKSI AKSES ROOT               ${CYAN}│${NC}"
+echo -e "${CYAN}│${GREEN}         MENJALANKAN SKRIP FLASHING...           ${CYAN}│${NC}"
 echo -e "${CYAN}└─────────────────────────────────────────────────┘${NC}"
-echo -e "${YELLOW}1. Ketik perintah${NC} ${GREEN}su${NC} ${YELLOW}lalu tekan ENTER.${NC}"
-echo -e "${YELLOW}2. Klik GRANT/IZINKAN jika muncul jendela Superuser di HP.${NC}"
-echo -e "${YELLOW}3. Setelah masuk root (tanda dolar '$' berubah jadi pagar '#'),${NC}"
-echo -e "${YELLOW}   ketik perintah di bawah ini untuk melanjutkan:${NC}"
-echo -e "${CYAN}   bash $SCRIPT_NAME${NC}"
-echo -e "${CYAN}───────────────────────────────────────────────────${NC}"
+echo -e "${YELLOW}-> INSTRUKSI: Klik 'GRANT/IZINKAN' jika muncul izin Superuser.${NC}"
+read -p "Tekan [ENTER] untuk mulai mengeksekusi proses flashing..."
+
+# Menjalankan perintah root dengan path absolut dan langsung mengeksekusi skrip di dalam foldernya
+su -c "export PATH=/data/data/com.termux/files/usr/bin:\$PATH && cd '$TARGET_PATH' && sh $SCRIPT_NAME"
