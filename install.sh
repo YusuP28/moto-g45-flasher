@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Pastikan skrip berhenti jika ada error fatal
+# Pastikan skrip berhenti jika terjadi error
 set -e
 
-# Kode Warna ANSI
+# Palet Warna ANSI Estetik
 RED='\033[1;31m'
 GREEN='\033[1;32m'
 CYAN='\033[1;36m'
@@ -12,7 +12,7 @@ BLUE='\033[1;34m'
 MAGENTA='\033[1;35m'
 NC='\033[0m' # No Color
 
-# Fungsi Animasi Loading Spinner
+# Fungsi Animasi Spinner
 tampil_loading() {
     local pid=$1
     local pesan=$2
@@ -27,69 +27,67 @@ tampil_loading() {
 }
 
 clear
-echo -e "${CYAN}=================================================${NC}"
-echo -e "${GREEN}    MOTO G45 ALL-IN-ONE MULTI-VERSION FLASHER    ${NC}"
-echo -e "${CYAN}=================================================${NC}"
+echo -e "${CYAN}┌─────────────────────────────────────────────────┐${NC}"
+echo -e "${CYAN}│${GREEN}     MOTO G45 ALL-IN-ONE MULTI-VERSION FLASHER   ${CYAN}│${NC}"
+echo -e "${CYAN}└─────────────────────────────────────────────────┘${NC}"
 
 # 1. Setup Izin Penyimpanan
-echo -e "\n${MAGENTA}[1/4] Menyiapkan izin penyimpanan...${NC}"
+echo -e "\n${MAGENTA}[1/3] Menyiapkan izin penyimpanan...${NC}"
 termux-setup-storage
 echo -e "${YELLOW}-> INSTRUKSI: Jika muncul jendela pop-up, klik 'ALLOW / IZINKAN'.${NC}"
 read -p "Tekan [ENTER] jika sudah memberikan izin penyimpanan..."
 
 # 2. Update Sistem & Install Tools
-echo -e "\n${MAGENTA}[2/4] Memperbarui sistem dan menginstal android-tools...${NC}"
+echo -e "\n${MAGENTA}[2/3] Memperbarui sistem dan menginstal android-tools...${NC}"
 echo -e "${YELLOW}-> INSTRUKSI: Jika muncul pertanyaan konfirmasi, ketik 'y' lalu tekan [ENTER].${NC}"
 read -p "Tekan [ENTER] untuk melanjutkan pembaruan sistem..."
 
 termux-change-repo
 ( apt update && apt full-upgrade -y && pkg install android-tools -y ) > /dev/null 2>&1 &
 pid=$!
-tampil_loading $pid "Sedang mengunduh dan memperbarui paket sistem..."
-echo -e "${GREEN}[✔] Paket android-tools berhasil diinstal!${NC}"
+tampil_loading $pid "Mengunduh dan memasang utilitas android-tools..."
+echo -e "${GREEN}[✔] Paket android-tools berhasil terpasang dengan sempurna!${NC}"
 
-# 3. Menyalin Folder dari Internal ke Home Termux
-echo -e "\n${MAGENTA}[3/4] Menyalin file firmware ke lingkungan Termux...${NC}"
-cd ~/
-if [ -d "/sdcard/FLASHABLE FOGOS TERMUX ROOT" ]; then
-    ( rm -rf FLASHABLE\ FOGOS\ TERMUX\ ROOT && cp -r /sdcard/FLASHABLE\ FOGOS\ TERMUX\ ROOT ./ ) > /dev/null 2>&1 &
-    pid=$!
-    tampil_loading $pid "Menyalin file firmware besar (harap tunggu)..."
-    echo -e "${GREEN}[✔] File firmware berhasil disalin ke Termux!${NC}"
+# 3. Validasi Keberadaan Folder Tanpa Proses Salin
+echo -e "\n${MAGENTA}[3/3] Memeriksa struktur direktori firmware...${NC}"
+TARGET_PATH="/sdcard/FLASHABLE_FOGOS_TERMUX_ROOT"
+
+if [ -d "$TARGET_PATH" ]; then
+    echo -e "${GREEN}[✔] Folder target ditemukan di penyimpanan internal!${NC}"
 else
-    echo -e "\n${RED}[X] Error: Folder '/sdcard/FLASHABLE FOGOS TERMUX ROOT' tidak ditemukan!${NC}"
-    echo -e "${RED}Pastikan Anda sudah menaruh folder tersebut di Penyimpanan Internal utama HP.${NC}"
+    echo -e "\n${RED}[X] Error: Folder '$TARGET_PATH' tidak ditemukan!${NC}"
+    echo -e "${YELLOW}Pastikan Anda telah membuat folder dengan nama tepat 'FLASHABLE_FOGOS_TERMUX_ROOT' di memori internal utama HP.${NC}"
     exit 1
 fi
 
-# Masuk ke direktori kerja
-cd ~/FLASHABLE\ FOGOS\ TERMUX\ ROOT
+# Masuk langsung ke folder penyimpanan internal
+cd "$TARGET_PATH"
 
 # 4. Menu Pilihan Versi Android Interaktif
-echo -e "\n${CYAN}================================================="
-echo -e "              ${GREEN}PILIH VERSI ANDROID${CYAN}"
-echo -e "================================================="
-echo -e " ${YELLOW}[1]${NC} Android 14 ${BLUE}(firmware14 & flash14.sh)${NC}"
-echo -e " ${YELLOW}[2]${NC} Android 15 ${BLUE}(firmware15 & flash15.sh)${NC}"
-echo -e "${CYAN}=================================================${NC}"
-echo -n -e "${MAGENTA}Silakan tekan angka pilihan Anda (1 atau 2): ${NC}"
+echo -e "\n${CYAN}┌─────────────────────────────────────────────────┐${NC}"
+echo -e "${CYAN}│               ${GREEN}PILIH VERSI ANDROID${CYAN}               │${NC}"
+echo -e "${CYAN}├─────────────────────────────────────────────────┤${NC}"
+echo -e "${CYAN}│${NC}  ${YELLOW}[1]${NC} Android 14 ${BLUE}(firmware14 & flash14.sh)${NC}       ${CYAN}│${NC}"
+echo -e "${CYAN}│${NC}  ${YELLOW}[2]${NC} Android 15 ${BLUE}(firmware15 & flash15.sh)${NC}       ${CYAN}│${NC}"
+echo -e "${CYAN}└─────────────────────────────────────────────────┘${NC}"
+echo -n -e "${MAGENTA}Silakan ketik angka pilihan Anda (1 atau 2): ${NC}"
 read -n 1 pilihan
 echo ""
 
 if [ "$pilihan" = "1" ]; then
-    echo -e "\n${GREEN}-> Anda memilih Android 14. Memuat flash14.sh...${NC}"
+    echo -e "\n${GREEN}-> Mengaktifkan mode skrip untuk Android 14...${NC}"
     SCRIPT_NAME="flash14.sh"
 elif [ "$pilihan" = "2" ]; then
-    echo -e "\n${GREEN}-> Anda memilih Android 15. Memuat flash15.sh...${NC}"
+    echo -e "\n${GREEN}-> Mengaktifkan mode skrip untuk Android 15...${NC}"
     SCRIPT_NAME="flash15.sh"
 else
-    echo -e "\n${RED}[X] Pilihan tidak valid! Anda menekan tombol yang salah. Harap ulangi dari awal.${NC}"
+    echo -e "\n${RED}[X] Pilihan tidak valid! Skrip dihentikan.${NC}"
     exit 1
 fi
 
-# 5. Membuka Root dan Menjalankan Flashing Sesuai Pilihan
-echo -e "\n${MAGENTA}[4/4] Membuka akses root dan menjalankan proses flashing...${NC}"
-echo -e "${YELLOW}-> INSTRUKSI: Ketik 'su' lalu tekan [ENTER] (klik GRANT/IZINKAN jika muncul pop-up Superuser).${NC}"
-read -p "Tekan [ENTER] untuk mulai mengeksekusi perintah root..."
+# 5. Eksekusi Skrip Flashing
+echo -e "\n${MAGENTA}Menyiapkan eksekusi modul flashing...${NC}"
+echo -e "${YELLOW}-> INSTRUKSI: Ketik 'su' lalu tekan [ENTER] (izinkan Superuser jika muncul pop-up).${NC}"
+read -p "Tekan [ENTER] untuk mulai menjalankan proses..."
 
-su -c "export PATH=/data/data/com.termux/files/usr/bin:\$PATH && cd /data/data/com.termux/files/home/FLASHABLE\ FOGOS\ TERMUX\ ROOT && bash $SCRIPT_NAME"
+su -c "export PATH=/data/data/com.termux/files/usr/bin:\$PATH && cd $TARGET_PATH && bash $SCRIPT_NAME"
