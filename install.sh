@@ -29,25 +29,27 @@ cp -r /sdcard/FLASHABLE\ FOGOS\ TERMUX\ ROOT ./
 # Masuk ke direktori kerja
 cd ~/FLASHABLE\ FOGOS\ TERMUX\ ROOT
 
-# 4. Menu Pilihan Versi Android
+# 4. Menu Pilihan Versi Android (Diperbarui agar lebih stabil)
 echo -e "\n================================================="
 echo "           PILIH VERSI ANDROID"
 echo "================================================="
 echo " 1. Android 14 (Menggunakan firmware14 & flash14.sh)"
 echo " 2. Android 15 (Menggunakan firmware15 & flash15.sh)"
 echo "================================================="
-read -p "Masukkan pilihan Anda (1 atau 2): " pilihan
+echo -n "Masukkan pilihan Anda (ketik angka 1 atau 2, lalu Enter): "
+read pilihan
 
-if [ "$pilihan" == "1" ]; then
+# Membersihkan spasi kosong jika ada
+pilihan=$(echo "$pilihan" | tr -d '[:space:]')
+
+if [ "$pilihan" = "1" ]; then
     echo -e "\n-> Anda memilih Android 14. Menjalankan flash14.sh..."
-    TARGET_DIR="firmware14"
     SCRIPT_NAME="flash14.sh"
-elif [ "$pilihan" == "2" ]; then
+elif [ "$pilihan" = "2" ]; then
     echo -e "\n-> Anda memilih Android 15. Menjalankan flash15.sh..."
-    TARGET_DIR="firmware15"
     SCRIPT_NAME="flash15.sh"
 else
-    echo "Pilihan tidak valid! Membatalkan proses."
+    echo -e "\n[X] Pilihan tidak valid ('$pilihan'). Harap masukkan angka 1 atau 2 saja!"
     exit 1
 fi
 
